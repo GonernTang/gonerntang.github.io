@@ -25,9 +25,17 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-npm-cache
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
+      - name: Clean cache
+        run: npm run clean
       - name: Build
         run: npm run build
+      - name: Verify build
+        run: |
+          echo "Checking public directory..."
+          ls -la public/
+          echo "Checking theme files..."
+          ls -la public/ | grep -i theme || echo "No theme files found"
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
